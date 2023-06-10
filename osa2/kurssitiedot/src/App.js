@@ -1,4 +1,13 @@
 const Course = ({course}) => {
+  
+  const total = () => {
+    const exercises = course.parts.map(part => part.exercises);
+    return exercises.reduce(
+      (sum, current) => sum + current,
+      0
+    );
+  };
+
   return (
     <div>
       <h1>
@@ -9,7 +18,9 @@ const Course = ({course}) => {
         {part.name} {part.exercises}
       </p>
         )}
-      
+      <b>
+        total of {total()} exercises
+      </b>
     </div>
     
   )
