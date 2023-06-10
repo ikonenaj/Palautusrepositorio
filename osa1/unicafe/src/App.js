@@ -41,17 +41,10 @@ const Statistics = ({good,neutral,bad}) => {
     );
   };
 
-  const style = {
-    "columnWidth": "length",
-  };
-
   return (
     <div>
       <Display value="Statistics" />
       <table>
-        <colgroup>
-          <col span="1" style={style}></col>
-        </colgroup>
         <tbody>
           <StatisticLine text="good" value={good} />
           <StatisticLine text="neutral" value={neutral} />
