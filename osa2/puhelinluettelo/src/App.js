@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Filter from "./components/Filter";
+import Notification from './components/Notification';
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import nameService from "./services/names";
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchName, setSearchName] = useState('');
+  const [message, setMessage] = useState('');
+  const [action, setAction] = useState('');
 
   useEffect(() => {
     nameService
@@ -30,6 +33,13 @@ const App = () => {
         setPersons(persons.map(person => person.name !== newName ? person : newObj));
         setNewName('');
         setNewNumber('');
+        setMessage(`Replaced ${newObj.name}'s number to ${newObj.number}`);
+        setAction("edit");
+
+        setTimeout(() => {
+          setMessage(null);
+          setAction(null);
+        }, 5000);
       }
       return;
     };
@@ -45,13 +55,30 @@ const App = () => {
         setNewName('');
         setNewNumber('');
       })
+
+    setMessage(`Added ${obj.name}`);
+    setAction("add");
+
+    setTimeout(() => {
+      setMessage(null);
+      setAction(null);
+    }, 5000);
+
   };
 
   const deleteName = (obj) => {
     if (window.confirm(`Delete ${obj.name}?`)) {
       nameService.deleteName(obj.id);
       setPersons(persons.filter(person => person.id !== obj.id));
+      setMessage(`Removed ${obj.name}`);
+      setAction("delete");
+
+      setTimeout(() => {
+        setMessage(null);
+        setAction(null);
+      }, 5000);
     }
+
   };
 
   const handleNameChange = (event) => {
@@ -69,6 +96,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} action={action} />
       <Filter searchName={searchName} handleSearchName={handleSearchName} />
       <h2>Add a new</h2>
       <PersonForm addNumber={addNumber} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
