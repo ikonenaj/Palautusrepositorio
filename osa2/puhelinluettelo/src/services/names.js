@@ -16,6 +16,10 @@ const deleteName = id => {
     return axios.delete(`${baseUrl}/${id}`);
 }
 
-const nameService = { create, deleteName, getAll }
+const updateNumber = (id, newObj) => {
+    return axios.put(`${baseUrl}/${id}`, newObj);
+};
+
+const nameService = { create, deleteName, getAll, updateNumber }
 
 export default nameService;
