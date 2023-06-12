@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
-import Persons from "./components/Persons"
+import Persons from "./components/Persons";
+import nameService from "./services/names";
 
 const App = () => {
-
-  const baseURL = "http://localhost:3001/persons";
 
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
@@ -14,11 +12,11 @@ const App = () => {
   const [searchName, setSearchName] = useState('');
 
   useEffect(() => {
-    axios
-    .get(baseURL)
-    .then(response => {
-      setPersons(response.data)
-    })
+    nameService
+      .getAll()
+      .then(names => {
+        setPersons(names)
+      })
   }, []);
 
   const addNumber = (event) => {
@@ -32,14 +30,14 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    
-    axios
-      .post(baseURL, obj)
-      .then(response => {
-        setPersons(persons.concat(response.data));
+
+    nameService
+      .create(obj)
+      .then(name => {
+        setPersons(persons.concat(name));
         setNewName('');
         setNewNumber('');
-      });
+      })
   };
 
   const handleNameChange = (event) => {
