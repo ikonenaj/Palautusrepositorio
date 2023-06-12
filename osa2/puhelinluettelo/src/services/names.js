@@ -12,6 +12,10 @@ const create = obj => {
     return request.then(response => response.data);
 };
 
-const nameService = { create, getAll }
+const deleteName = id => {
+    return axios.delete(`${baseUrl}/${id}`);
+}
+
+const nameService = { create, deleteName, getAll }
 
 export default nameService;

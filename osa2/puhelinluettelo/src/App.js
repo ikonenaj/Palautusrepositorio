@@ -40,6 +40,13 @@ const App = () => {
       })
   };
 
+  const deleteName = (obj) => {
+    if (window.confirm(`Delete ${obj.name}?`)) {
+      nameService.deleteName(obj.id);
+      setPersons(persons.filter(person => person.id !== obj.id));
+    }
+  };
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -59,7 +66,7 @@ const App = () => {
       <h2>Add a new</h2>
       <PersonForm addNumber={addNumber} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons searchName={searchName} persons={persons} />
+      <Persons deleteName={deleteName} searchName={searchName} persons={persons} />
     </div>
   );
 
