@@ -17,10 +17,23 @@ const App = () => {
     setSearchCountry(event.target.value);
   };
 
+  const showOneCountry = (country) => {
+    setCountries([country]);
+  };
+
+  const reset = () => {
+    setSearchCountry('');
+    axios
+    .get('https://studies.cs.helsinki.fi/restcountries/api/all')
+    .then(response => setCountries(response.data));
+  };
+
   return (
     <div>
       find countries <input value={searchCountry} onChange={handleChange} />
-      <Countries searchCountry={searchCountry} countries={countries} />
+      <Countries searchCountry={searchCountry} countries={countries} showOneCountry={showOneCountry} />
+      <br />
+      <button onClick={() => reset()}>Reset</button>
     </div>
   );
 };

@@ -1,5 +1,6 @@
-const Countries = ({ searchCountry, countries }) => {
-    const filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchCountry.toLowerCase()));
+const Countries = ({ showOneCountry, searchCountry, countries }) => {
+    let filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchCountry.toLowerCase()));
+    if (countries.length === 1) {filteredCountries = countries};
     if (searchCountry && filteredCountries.length > 10) {
         return (
             <div>
@@ -11,12 +12,12 @@ const Countries = ({ searchCountry, countries }) => {
             filteredCountries.map(country => {
                 return (
                     <div key={country.name.common}>
-                        {country.name.common}
+                        {country.name.common} <button onClick={() => showOneCountry(country)}>show</button>
                     </div>
                 )
             })
         )
-    } else if (searchCountry && filteredCountries.length === 1) {
+    } else if (filteredCountries.length === 1) {
         const country = filteredCountries[0];
         return(
             <div>
