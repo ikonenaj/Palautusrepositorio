@@ -1,6 +1,5 @@
 const Countries = ({ showOneCountry, searchCountry, countries }) => {
     let filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchCountry.toLowerCase()));
-    if (countries.length === 1) {filteredCountries = countries};
     if (searchCountry && filteredCountries.length > 10) {
         return (
             <div>
