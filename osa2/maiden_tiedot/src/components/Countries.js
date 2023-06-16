@@ -9,7 +9,7 @@ const Countries = ({ showOneCountry, searchCountry, countries }) => {
         setWeatherData({});
     }, [searchCountry]);
 
-    let filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchCountry.toLowerCase()));
+    const filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchCountry.toLowerCase()));
     if (searchCountry && filteredCountries.length > 10) {
         return (
             <div>
