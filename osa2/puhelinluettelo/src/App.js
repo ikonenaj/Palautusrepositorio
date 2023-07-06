@@ -65,6 +65,16 @@ const App = () => {
         setNewName('');
         setNewNumber('');
       })
+      .catch(error => {
+        console.log(error);
+        setMessage(error.response.data);
+        setAction("error");
+
+        setTimeout(() => {
+          setMessage(null);
+          setAction(null);
+        }, 5000);
+      })
 
     setMessage(`Added ${obj.name}`);
     setAction("add");
