@@ -38,10 +38,27 @@ const mostBlogs = (blogs) => {
         blogs: counts[author]
     }
 }
+
+const mostLikes = (blogs) => {
+    if (blogs.length === 0) return {}
+    const authorAndLikes = blogs.map(blog => ({ author: blog.author, likes: blog.likes }))
+    console.log(authorAndLikes);
+    const likes = {}
+    for (const obj of authorAndLikes) {
+        likes[obj.author] = likes[obj.author] ? likes[obj.author] + obj.likes : obj.likes
+    }
+    console.log(likes);
+    const likesArray = Object.entries(likes)
+    console.log(likesArray);
+    const sorted = likesArray.sort((a,b) => b[1] - a[1])
+    console.log(sorted);
+    return {author: sorted[0][0], likes: sorted[0][1]}
+}
   
   module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
   }
