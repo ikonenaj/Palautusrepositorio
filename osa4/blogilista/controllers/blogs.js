@@ -21,13 +21,25 @@ blogsRouter.get('/', (request, response) => {
 
     const savedBlog = await blog.save()
     response.status(201).json(savedBlog)
-    /*const blog = new Blog(request.body)
-  
-    blog
-      .save()
-      .then(result => {
-        response.status(201).json(result)
-      })*/
+  })
+
+  blogsRouter.delete('/:id', async (request, response) => {
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  })
+
+  blogsRouter.put('/:id', async (request, response) => {
+    const body = request.body
+
+    const blog = {
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes
+    }
+
+    const updated = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    response.status(200).json(updated)
   })
 
   module.exports = blogsRouter
