@@ -69,6 +69,31 @@ test('if value is not set for like it will be 0 by default', async () => {
     expect(addedBlog.likes).toBe(0)
 })
 
+test('blogs that are added without title or url will get status code 400 as response', async () => {
+    const withoutTitle = {
+        author: "John Doe",
+        url: "https://aalto.fi"
+    }
+
+    const withoutUrl = {
+        title: "New Blog",
+        author: "John Doe"
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(withoutTitle)
+        .expect(400)
+
+    await api
+        .post('/api/blogs')
+        .send(withoutUrl)
+        .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
