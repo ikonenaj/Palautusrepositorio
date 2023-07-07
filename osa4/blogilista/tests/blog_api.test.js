@@ -30,6 +30,45 @@ test('blogs have correct id key', async () => {
     expect(blog.id).toBeDefined()
 })
 
+test('blogs can be added to database', async () => {
+    const newBlog = {
+        title: "New Blog",
+        author: "John Doe",
+        url: "https://aalto.fi",
+        likes: 99
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+    const contents = blogsAtEnd.map(blog => blog.title)
+    expect(contents).toContain('New Blog')
+})
+
+test('if value is not set for like it will be 0 by default', async () => {
+    const newBlog = {
+        title: "New Blog",
+        author: "John Doe",
+        url: "https://aalto.fi"
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+    
+    const blogsAtEnd = await helper.blogsInDb()
+    const addedBlog = blogsAtEnd.pop()
+    expect(addedBlog.likes).toBe(0)
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
