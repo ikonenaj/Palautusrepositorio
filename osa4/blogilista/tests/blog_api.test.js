@@ -127,7 +127,7 @@ describe('updating notes', () => {
 
         const blogsAtEnd = await helper.blogsInDb()
         const updatedBlog = blogsAtEnd[0]
-        expect(updatedBlog.likes).toBe(20000)
+        expect(updatedBlog.likes).toBe(blog.likes)
     })
 })
 
