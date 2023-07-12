@@ -10,6 +10,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 let headers
+let gUser
 beforeAll(async () => {
     await User.deleteMany({})
     const hash = await bcrypt.hash('root', 10)
@@ -18,15 +19,17 @@ beforeAll(async () => {
 
     const userForToken = {
         username: user.username,
-        id: user.id
+        id: user._id
     }
     const token = jwt.sign(userForToken, process.env.SECRET)
-    headers = { Authorization: `bearer ${token}` }
+    gUser = user
+    headers = { Authorization: `Bearer ${token}` }
 })
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
+    const addedUser = helper.initialBlogs.map(blog => ({...blog, user: gUser._id}))
+    await Blog.insertMany(addedUser)
 })
 
 describe('inital blogs saved', () => {
@@ -123,9 +126,11 @@ describe('deleting notes', () => {
     test('deleting a note with a valid id', async () => {
         const blogs = await helper.blogsInDb()
         const blog = blogs[0]
+        console.log(blog);
 
         await api
             .delete(`/api/blogs/${blog.id}`)
+            .set(headers)
             .expect(204)
 
         const blogsAtEnd = await helper.blogsInDb()
