@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -10,6 +11,8 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const [action, setAction] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -44,8 +47,15 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      console.log(exception)
+    } catch (error) {
+        console.log(error)
+        setMessage(error.response.data.error);
+        setAction('error');
+
+        setTimeout(() => {
+          setMessage('')
+          setAction('')
+        }, 5000)
     }
   }
 
@@ -53,8 +63,15 @@ const App = () => {
     try {
       window.localStorage.removeItem('loggedBlogappUser')
       setUser(null)
-    } catch (exception) {
-      console.log(exception)
+    } catch (error) {
+        console.log(error)
+        setMessage(error.response.data.error);
+        setAction('error');
+      
+        setTimeout(() => {
+          setMessage('')
+          setAction('')
+        }, 5000)
     }
   }
 
@@ -90,11 +107,29 @@ const App = () => {
       url: url
     }
 
-    const blog = await blogService.create(blogObject)
-    setBlogs(blogs.concat(blog))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    try {
+      const blog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(blog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setMessage(`a new blog ${blog.title} by ${blog.author} added`)
+      setAction('add')
+      setTimeout(() => {
+        setMessage('')
+        setAction('')
+      }, 5000)
+      
+    } catch (error) {
+      console.log(error)
+      setMessage(error.response.data.error);
+      setAction('error');
+
+      setTimeout(() => {
+        setMessage('')
+        setAction('')
+      }, 5000)
+    }
   }
 
   const blogForm = () => (
@@ -149,6 +184,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} action={action} />
       {!user && loginForm()}
       {user && blogList()}
     </div>
