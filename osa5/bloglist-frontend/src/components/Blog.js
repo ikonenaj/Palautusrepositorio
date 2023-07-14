@@ -12,7 +12,7 @@ const Blog = ({blog}) => {
 
   const showDetails = { display: viewAll ? '' : 'none' }
 
-  let buttonText = viewAll ? 'view': 'hide'
+  let buttonText = viewAll ? 'hide': 'view'
 
   const changeView = () => {
     setViewAll(!viewAll)
