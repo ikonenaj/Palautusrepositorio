@@ -27,7 +27,6 @@ const BlogForm = ({ createBlog, setAction, setMessage }) => {
               setAction('')
             }, 5000)
         }
-
     }
 
     return (
