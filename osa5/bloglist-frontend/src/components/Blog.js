@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({blog}) => {
+const Blog = ({ blog, updateBlog }) => {
   const [viewAll, setViewAll] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -18,12 +18,22 @@ const Blog = ({blog}) => {
     setViewAll(!viewAll)
   }
 
+  const update = async () => {
+      await updateBlog(blog.id, {
+        user: blog.user.id,
+        likes: blog.likes + 1,
+        author: blog.author,
+        title: blog.title,
+        url: blog.url
+      })
+  }
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author} <button onClick={changeView}>{buttonText}</button> <br/>
       <div style={showDetails}>
         {blog.url}<br/>
-        likes {blog.likes}<button>like</button><br/>
+        likes {blog.likes}<button onClick={update}>like</button><br/>
         {blog.user.name}
       </div>
     </div>  
