@@ -32,6 +32,17 @@ const App = () => {
     }
   }, [])
 
+  const showErrorMessage = (error) => {
+    console.log(error)
+    setMessage(error.response.data.error);
+    setAction('error');
+
+    setTimeout(() => {
+      setMessage('')
+      setAction('')
+    }, 5000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     
@@ -48,14 +59,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-        console.log(error)
-        setMessage(error.response.data.error);
-        setAction('error');
-
-        setTimeout(() => {
-          setMessage('')
-          setAction('')
-        }, 5000)
+        showErrorMessage(error)
     }
   }
 
@@ -64,14 +68,7 @@ const App = () => {
       window.localStorage.removeItem('loggedBlogappUser')
       setUser(null)
     } catch (error) {
-        console.log(error)
-        setMessage(error.response.data.error);
-        setAction('error');
-
-        setTimeout(() => {
-          setMessage('')
-          setAction('')
-        }, 5000)
+        showErrorMessage(error)
     }
   }
 
@@ -105,14 +102,23 @@ const App = () => {
       const updatedBlogs = blogs.map(blog => blog.id === id ? updatedBlog : blog)
       setBlogs(updatedBlogs)
     } catch (error) {
-        console.log(error)
-        setMessage(error.response.data.error);
-        setAction('error');
-  
+        showErrorMessage(error)
+      }
+    }
+
+    const removeBlog = async (id) => {
+      try {
+        await blogService.remove(id)
+        const updatedBlogs = blogs.filter(blog => blog.id !== id)
+        setBlogs(updatedBlogs)
+        setMessage('Blog removed successfully')
+        setAction('edit')
         setTimeout(() => {
           setMessage('')
           setAction('')
         }, 5000)
+      } catch (error) {
+        showErrorMessage(error)
       }
     }
 
@@ -129,7 +135,7 @@ const App = () => {
       </Togglable>
       <br/>
       {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
+        <Blog key={blog.id} blog={blog} removeBlog={removeBlog} updateBlog={updateBlog}/>
       )}
     </div>
   )

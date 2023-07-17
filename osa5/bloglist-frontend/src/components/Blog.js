@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, removeBlog, updateBlog }) => {
   const [viewAll, setViewAll] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -28,6 +28,12 @@ const Blog = ({ blog, updateBlog }) => {
       })
   }
 
+  const remove = async () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await removeBlog(blog.id)
+    }
+  }
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author} <button onClick={changeView}>{buttonText}</button> <br/>
@@ -35,6 +41,7 @@ const Blog = ({ blog, updateBlog }) => {
         {blog.url}<br/>
         likes {blog.likes}<button onClick={update}>like</button><br/>
         {blog.user.name}
+        <button onClick={() => remove()}>remove</button>
       </div>
     </div>  
 )}
