@@ -36,11 +36,11 @@ const Blog = ({ blog, user, removeBlog, updateBlog }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title} {blog.author} <button onClick={changeView}>{buttonText}</button> <br/>
+      <span id="title">{blog.title}</span> <span id="author">{blog.author}</span> <button onClick={changeView}>{buttonText}</button> <br/>
       <div style={showDetails}>
-        {blog.url}<br/>
-        likes {blog.likes}<button onClick={update}>like</button><br/>
-        {blog.user.name}
+        <span id="url">{blog.url}</span><br/>
+        <span id="likes">likes {blog.likes}</span><button onClick={update}>like</button><br/>
+        <span id="name">{blog.user.name}</span>
         {blog.user.username === user.username && <button onClick={() => remove()}>remove</button>}
       </div>
     </div>  
