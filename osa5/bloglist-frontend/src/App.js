@@ -98,7 +98,10 @@ const App = () => {
 
   const updateBlog = async (id, newObj) => {
     try {
+      const beforeUpdate = blogs.find(blog => blog.id === id)
+      const tmpUser = beforeUpdate.user;
       const updatedBlog = await blogService.update(id, newObj)
+      updatedBlog.user = tmpUser
       const updatedBlogs = blogs.map(blog => blog.id === id ? updatedBlog : blog)
       setBlogs(updatedBlogs)
     } catch (error) {
