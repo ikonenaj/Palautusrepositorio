@@ -24,10 +24,11 @@ describe('<Blog />', () => {
     }
 
     let container
+    const mockHandler = jest.fn()
 
     beforeEach(() => {
         container = render(
-            <Blog blog={blog} user={user} />
+            <Blog blog={blog} user={user} updateBlog={mockHandler} />
         ).container
     })
 
@@ -53,30 +54,16 @@ describe('<Blog />', () => {
         expect(container.querySelector('#likes')).toHaveTextContent(`likes ${blog.likes}`)
         expect(container.querySelector('#likes')).toBeVisible()
     })
+
+    test('clicking the like button twice calls event handler twice', async () => {
+        const user = userEvent.setup()
+        const viewButton = screen.getByText('view')
+        await user.click(viewButton)
+
+        const likeButton = screen.getByText('like')
+        await user.click(likeButton)
+        await user.click(likeButton)
+
+        expect(mockHandler.mock.calls).toHaveLength(2)
+    })
 })
-
-/*test('renders title', () => {
-    const user = {
-        username: 'username',
-        name: 'name'
-    }
-    const blog = {
-        title: 'Test title',
-        author: 'Test author',
-        url: 'www.test.com',
-        likes: 0,
-        user: {
-            username: 'username',
-            name: 'name'
-        }
-    }
-
-    render(<Blog blog={blog} user={user} />)
-
-    const element = screen.getByText(`${blog.title} ${blog.author}`)
-    expect(element).toBeDefined()
-    const url = screen.queryByText(`${blog.url}`)
-    expect(url).toBeNull()
-    const likes =  screen.queryByText(`likes ${blog.likes}`)
-    expect(likes).toBeNull()
-})*/
