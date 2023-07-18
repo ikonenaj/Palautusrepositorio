@@ -45,3 +45,19 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
 
     cy.visit('')
 })
+
+Cypress.Commands.add('like', (title, author) => {
+    cy.contains(`${title} ${author}`)
+        .contains('view')
+        .click()
+
+    cy.contains(`${title} ${author}`)
+        .contains('likes')
+        .parent()
+        .find('#like-button')
+        .click()
+
+    cy.contains(`${title} ${author}`)
+        .contains('hide')
+        .click()
+})

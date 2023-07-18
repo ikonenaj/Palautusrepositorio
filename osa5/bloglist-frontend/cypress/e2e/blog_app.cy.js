@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
@@ -114,6 +115,18 @@ describe('Blog app', function() {
             .parent()
             .get("#remove-button")
             .should('not.exist')
+        })
+
+        it('Blogs should be ordered by like count', function() {
+          cy.like('Title 3', 'Author 3')
+          cy.like('Title 3', 'Author 3')
+          cy.like('Title 3', 'Author 3')
+          cy.like('Title 2', 'Author 2')
+          cy.like('Title 2', 'Author 2')
+
+          cy.get('.blog').eq(0).should('contain', 'Title 3')
+          cy.get('.blog').eq(1).should('contain', 'Title 2')
+          cy.get('.blog').eq(2).should('contain', 'Title 1')
         })
       })
     })
