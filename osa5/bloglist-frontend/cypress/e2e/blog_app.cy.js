@@ -61,7 +61,7 @@ describe('Blog app', function() {
           cy.createBlog({ title: 'Title 3', author: 'Author 3', url: 'www.url3.com' })
         })
 
-        it('Blogs can be liked', function () {
+        it('Blogs can be liked', function() {
           cy.contains('Title 1 Author 1')
             .contains('view')
             .click()
@@ -74,6 +74,46 @@ describe('Blog app', function() {
 
           cy.contains('Title 1 Author 1')
             .contains('likes 1')
+        })
+
+        it('Blogs can be removed', function() {
+          cy.contains('Title 3 Author 3')
+          .contains('view')
+          .click()
+
+          cy.contains('Title 3 Author 3')
+          .contains('remove')
+          .click()
+
+          cy.on('window:confirm', function() {
+            return true
+          })
+
+          cy.get('.edit')
+          .should('contain', 'Blog removed successfully')
+          .and('have.css', 'color', 'rgb(0, 128, 0)')
+          .and('have.css', 'border-style', 'solid')
+        })
+
+        it('Only the user that added the blog can see remove button', function() {
+          const user = {
+            username: 'test',
+            name: 'test',
+            password: 'test'
+          }
+          cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
+          cy.visit('')
+          cy.login({ username: 'test', password: 'test' })
+
+          cy.contains('Title 2 Author 2')
+            .contains('view')
+            .click()
+
+          cy.contains('Title 2 Author 2')
+            .contains('likes')
+            .parent()
+            .get("#remove-button")
+            .should('not.exist')
         })
       })
     })
