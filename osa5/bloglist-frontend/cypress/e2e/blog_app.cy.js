@@ -29,7 +29,11 @@ describe('Blog app', function() {
       cy.get('#password').type('wrong')
       cy.get('#login-button').click()
 
-      cy.get('.error').contains('invalid username or password')
+      cy.get('.error')
+      .should('contain', 'invalid username or password')
+      .and('have.css', 'color', 'rgb(255, 0, 0)')
+      .and('have.css', 'border-style', 'solid')
+
       cy.get('html').should('not.contain', 'root logged in')
     })
 
@@ -44,7 +48,33 @@ describe('Blog app', function() {
         cy.get('#author').type('Test author')
         cy.get('#url').type('www.test.com')
         cy.get('#submit-button').click()
-        cy.get('.add').contains('a new blog Test title by Test author added')
+        cy.get('.add')
+        .should('contain', 'a new blog Test title by Test author added')
+        .and('have.css', 'color', 'rgb(0, 128, 0)')
+        .and('have.css', 'border-style', 'solid')
+      })
+
+      describe('Several blogs exist', function() {
+        beforeEach(function () {
+          cy.createBlog({ title: 'Title 1', author: 'Author 1', url: 'www.url1.com' })
+          cy.createBlog({ title: 'Title 2', author: 'Author 2', url: 'www.url2.com' })
+          cy.createBlog({ title: 'Title 3', author: 'Author 3', url: 'www.url3.com' })
+        })
+
+        it('Blogs can be liked', function () {
+          cy.contains('Title 1 Author 1')
+            .contains('view')
+            .click()
+
+          cy.contains('Title 1 Author 1')
+            .contains('likes')
+            .parent()
+            .find('#like-button')
+            .click()
+
+          cy.contains('Title 1 Author 1')
+            .contains('likes 1')
+        })
       })
     })
   })
