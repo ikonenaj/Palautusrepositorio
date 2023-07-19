@@ -8,9 +8,7 @@ const store = createStore(reducer)
 
 const App = () => {
   const handleClick = (type) => {
-    store.dispatch({
-      type: type
-    })
+    store.dispatch({ type })
   }
 
 
