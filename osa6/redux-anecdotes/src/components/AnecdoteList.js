@@ -6,7 +6,7 @@ const AnecdoteList = () => {
     const dispatch = useDispatch()
 
     const anecdotes = useSelector(state => 
-        state.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(state.filter))
+      state.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(state.filter))
     )
 
     const vote = (anecdote) => {
