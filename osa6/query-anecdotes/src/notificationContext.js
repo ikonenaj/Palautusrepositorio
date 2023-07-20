@@ -1,5 +1,7 @@
 import { createContext, useContext, useReducer } from "react"
 
+let timeout = null
+
 const notificationReducer = (state, action) => {
     switch (action.type) {
         case 'SET':
