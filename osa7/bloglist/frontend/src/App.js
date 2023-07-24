@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNotificationDispatch } from './notificationContext'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { getBlogs, createBlog, setToken } from './requests'
+import { getBlogs, createBlog, likeBlog, deleteBlog, setToken } from './requests'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -18,6 +18,8 @@ const App = () => {
 
   const queryClient = useQueryClient()
   const newBlogMutation = useMutation(createBlog)
+  const updateBlogMutation = useMutation(likeBlog)
+  const removeBlogMutation = useMutation(deleteBlog)
 
   const dispatch = useNotificationDispatch()
 
@@ -33,22 +35,12 @@ const App = () => {
   const blogFormRef = useRef()
 
   const result = useQuery('blogs', getBlogs)
-  console.log(result)
 
   if (result.isLoading) {
     return <div>loading data...</div>
   }
 
   const blogs = result.data
-  console.log(blogs);
-
-  /*useEffect(() => {
-    async function getAll() {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
-    getAll()
-  }, [])*/
 
   const showErrorMessage = (error) => {
     console.log(error)
@@ -103,48 +95,49 @@ const App = () => {
         setTimeout(() => {
           dispatch({ type: 'SET', payload: { message: '', style: '' } })
         }, 5000)
+      },
+      onError: (error) => {
+        dispatch({ type: 'SET', payload: { message: error.response.data.error, style: 'error' } })
+
+        setTimeout(() => {
+          dispatch({ type: 'SET', payload: { message: '', style: '' } })
+        }, 5000)
       }
-    })
+      })
   }
 
-  /*const addBlog = async (blogObject) => {
-    blogFormRef.current.toggleVisibility()
-    const blog = await blogService.create(blogObject)
-    blog.user = user
-    //setBlogs(blogs.concat(blog))
-    dispatch({ type: 'SET', payload: { message: `a new blog ${blog.title} by ${blog.author} added`, style: 'add' } })
-    setTimeout(() => {
-      dispatch({ type: 'SET', payload: { message: '', style: '' } })
-    }, 5000)
-  }*/
-
   const updateBlog = async (id, newObj) => {
-    try {
-      const beforeUpdate = blogs.find((blog) => blog.id === id)
-      const tmpUser = beforeUpdate.user
-      const updatedBlog = await blogService.update(id, newObj)
-      updatedBlog.user = tmpUser
-      const updatedBlogs = blogs.map((blog) =>
-        blog.id === id ? updatedBlog : blog
-      )
-      //setBlogs(updatedBlogs)
-    } catch (error) {
-      showErrorMessage(error)
-    }
+      updateBlogMutation.mutate({id, newObj}, {
+        onSuccess: () => {
+          queryClient.invalidateQueries('blogs')
+        },
+        onError: (error) => {
+          dispatch({ type: 'SET', payload: { message: error.response.data.error, style: 'error' } })
+  
+          setTimeout(() => {
+            dispatch({ type: 'SET', payload: { message: '', style: '' } })
+          }, 5000)
+        }
+      })
   }
 
   const removeBlog = async (id) => {
-    try {
-      await blogService.remove(id)
-      const updatedBlogs = blogs.filter((blog) => blog.id !== id)
-      //setBlogs(updatedBlogs)
-      dispatch({ type: 'SET', payload: { message: 'Blog removed successfully', style: 'edit' } })
-      setTimeout(() => {
-        dispatch({ type: 'SET', payload: { message: '', style: '' } })
-      }, 5000)
-    } catch (error) {
-      showErrorMessage(error)
-    }
+      removeBlogMutation.mutate(id, {
+        onSuccess: () => {
+          queryClient.invalidateQueries('blogs')
+          dispatch({ type: 'SET', payload: { message: 'Blog removed successfully', style: 'edit' } })
+          setTimeout(() => {
+            dispatch({ type: 'SET', payload: { message: '', style: '' } })
+          }, 5000)
+        },
+        onError: (error) => {
+          dispatch({ type: 'SET', payload: { message: error.response.data.error, style: 'error' } })
+  
+          setTimeout(() => {
+            dispatch({ type: 'SET', payload: { message: '', style: '' } })
+          }, 5000)
+        }
+      })
   }
 
 
