@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNotificationDispatch } from './notificationContext'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { getBlogs, createBlog, setToken } from './requests'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -9,29 +11,44 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  //const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  const dispatch = useNotificationDispatch()
+  const queryClient = useQueryClient()
+  const newBlogMutation = useMutation(createBlog)
 
-  useEffect(() => {
-    async function getAll() {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
-    getAll()
-  }, [])
+  const dispatch = useNotificationDispatch()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      blogService.setToken(user.token)
+      setToken(user.token)
     }
   }, [])
+
+  const blogFormRef = useRef()
+
+  const result = useQuery('blogs', getBlogs)
+  console.log(result)
+
+  if (result.isLoading) {
+    return <div>loading data...</div>
+  }
+
+  const blogs = result.data
+  console.log(blogs);
+
+  /*useEffect(() => {
+    async function getAll() {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    }
+    getAll()
+  }, [])*/
 
   const showErrorMessage = (error) => {
     console.log(error)
@@ -79,15 +96,27 @@ const App = () => {
   }
 
   const addBlog = async (blogObject) => {
+    newBlogMutation.mutate(blogObject, {
+      onSuccess: () => {
+        queryClient.invalidateQueries('blogs')
+        dispatch({ type: 'SET', payload: { message: `a new blog ${blogObject.title} by ${blogObject.author} added`, style: 'add' } })
+        setTimeout(() => {
+          dispatch({ type: 'SET', payload: { message: '', style: '' } })
+        }, 5000)
+      }
+    })
+  }
+
+  /*const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     const blog = await blogService.create(blogObject)
     blog.user = user
-    setBlogs(blogs.concat(blog))
+    //setBlogs(blogs.concat(blog))
     dispatch({ type: 'SET', payload: { message: `a new blog ${blog.title} by ${blog.author} added`, style: 'add' } })
     setTimeout(() => {
       dispatch({ type: 'SET', payload: { message: '', style: '' } })
     }, 5000)
-  }
+  }*/
 
   const updateBlog = async (id, newObj) => {
     try {
@@ -98,7 +127,7 @@ const App = () => {
       const updatedBlogs = blogs.map((blog) =>
         blog.id === id ? updatedBlog : blog
       )
-      setBlogs(updatedBlogs)
+      //setBlogs(updatedBlogs)
     } catch (error) {
       showErrorMessage(error)
     }
@@ -108,7 +137,7 @@ const App = () => {
     try {
       await blogService.remove(id)
       const updatedBlogs = blogs.filter((blog) => blog.id !== id)
-      setBlogs(updatedBlogs)
+      //setBlogs(updatedBlogs)
       dispatch({ type: 'SET', payload: { message: 'Blog removed successfully', style: 'edit' } })
       setTimeout(() => {
         dispatch({ type: 'SET', payload: { message: '', style: '' } })
@@ -118,7 +147,7 @@ const App = () => {
     }
   }
 
-  const blogFormRef = useRef()
+
 
   const blogList = () => (
     <div>
