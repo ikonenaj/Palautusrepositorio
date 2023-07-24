@@ -24,12 +24,12 @@ describe('favorite blog', () => {
   test('returns blog with most likes', () => {
     const result = listHelper.favoriteBlog(testHelper.initialBlogs)
     expect(result).toEqual({
-      _id: "5a422b3a1b54a676234d17f9",
-      title: "Canonical string reduction",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+      _id: '5a422b3a1b54a676234d17f9',
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
       likes: 12,
-      __v: 0
+      __v: 0,
     })
   })
 
@@ -43,8 +43,8 @@ describe('most blogs', () => {
   test('author with most blogs and blog count', () => {
     const result = listHelper.mostBlogs(testHelper.initialBlogs)
     expect(result).toEqual({
-      author: "Robert C. Martin",
-      blogs: 3 
+      author: 'Robert C. Martin',
+      blogs: 3,
     })
   })
 
@@ -55,7 +55,7 @@ describe('most blogs', () => {
   test('list with one blog returns author and blog count one', () => {
     expect(listHelper.mostBlogs(testHelper.listWithOneBlog)).toEqual({
       author: 'Edsger W. Dijkstra',
-      blogs: 1
+      blogs: 1,
     })
   })
 })
@@ -63,15 +63,15 @@ describe('most blogs', () => {
 describe('most likes', () => {
   test('list with multiple blogs expect author and total like count', () => {
     expect(listHelper.mostLikes(testHelper.initialBlogs)).toEqual({
-      author: "Edsger W. Dijkstra",
-      likes: 17
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
     })
   })
 
   test('list with one entry', () => {
     expect(listHelper.mostLikes(testHelper.listWithOneBlog)).toEqual({
-      author: "Edsger W. Dijkstra",
-      likes: 5
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
     })
   })
 

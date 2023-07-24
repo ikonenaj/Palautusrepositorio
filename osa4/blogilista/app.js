@@ -12,7 +12,8 @@ const middleware = require('./utils/middleware')
 
 mongoose.set('strictQuery', false)
 
-mongoose.connect(config.MONGODB_URI)
+mongoose
+  .connect(config.MONGODB_URI)
   .then(() => {
     console.log('connected to MongoDB')
   })

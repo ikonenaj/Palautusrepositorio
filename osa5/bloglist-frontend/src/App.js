@@ -9,7 +9,7 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
   const [action, setAction] = useState('')
@@ -34,8 +34,8 @@ const App = () => {
 
   const showErrorMessage = (error) => {
     console.log(error)
-    setMessage(error.response.data.error);
-    setAction('error');
+    setMessage(error.response.data.error)
+    setAction('error')
 
     setTimeout(() => {
       setMessage('')
@@ -45,21 +45,20 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
-        username, password,
+        username,
+        password,
       })
 
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (error) {
-        showErrorMessage(error)
+      showErrorMessage(error)
     }
   }
 
@@ -68,7 +67,7 @@ const App = () => {
       window.localStorage.removeItem('loggedBlogappUser')
       setUser(null)
     } catch (error) {
-        showErrorMessage(error)
+      showErrorMessage(error)
     }
   }
 
@@ -95,32 +94,34 @@ const App = () => {
 
   const updateBlog = async (id, newObj) => {
     try {
-      const beforeUpdate = blogs.find(blog => blog.id === id)
-      const tmpUser = beforeUpdate.user;
+      const beforeUpdate = blogs.find((blog) => blog.id === id)
+      const tmpUser = beforeUpdate.user
       const updatedBlog = await blogService.update(id, newObj)
       updatedBlog.user = tmpUser
-      const updatedBlogs = blogs.map(blog => blog.id === id ? updatedBlog : blog)
+      const updatedBlogs = blogs.map((blog) =>
+        blog.id === id ? updatedBlog : blog
+      )
       setBlogs(updatedBlogs)
     } catch (error) {
-        showErrorMessage(error)
-      }
+      showErrorMessage(error)
     }
+  }
 
-    const removeBlog = async (id) => {
-      try {
-        await blogService.remove(id)
-        const updatedBlogs = blogs.filter(blog => blog.id !== id)
-        setBlogs(updatedBlogs)
-        setMessage('Blog removed successfully')
-        setAction('edit')
-        setTimeout(() => {
-          setMessage('')
-          setAction('')
-        }, 5000)
-      } catch (error) {
-        showErrorMessage(error)
-      }
+  const removeBlog = async (id) => {
+    try {
+      await blogService.remove(id)
+      const updatedBlogs = blogs.filter((blog) => blog.id !== id)
+      setBlogs(updatedBlogs)
+      setMessage('Blog removed successfully')
+      setAction('edit')
+      setTimeout(() => {
+        setMessage('')
+        setAction('')
+      }, 5000)
+    } catch (error) {
+      showErrorMessage(error)
     }
+  }
 
   const blogFormRef = useRef()
 
@@ -129,21 +130,41 @@ const App = () => {
       <h2>blogs</h2>
       {user.name} logged in
       <button onClick={handleLogout}>logout</button>
-      <br/>
-      <Togglable buttonLabel='new blog' ref={blogFormRef}>
-        <BlogForm createBlog={addBlog} setAction={setAction} setMessage={setMessage} />
+      <br />
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogForm
+          createBlog={addBlog}
+          setAction={setAction}
+          setMessage={setMessage}
+        />
       </Togglable>
-      <br/>
-      {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} updateBlog={updateBlog} />
-      )}
+      <br />
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            user={user}
+            removeBlog={removeBlog}
+            updateBlog={updateBlog}
+          />
+        ))}
     </div>
   )
 
   return (
     <div>
       <Notification message={message} action={action} />
-      {!user && <LoginForm  username={username} password={password} handleUsernameChange={handleUsernameChange} handlePasswordChange={handlePasswordChange} handleLogin={handleLogin} />}
+      {!user && (
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={handleUsernameChange}
+          handlePasswordChange={handlePasswordChange}
+          handleLogin={handleLogin}
+        />
+      )}
       {user && blogList()}
     </div>
   )

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const Blog = ({ blog, user, removeBlog, updateBlog }) => {
   const [viewAll, setViewAll] = useState(false)
@@ -7,25 +7,25 @@ const Blog = ({ blog, user, removeBlog, updateBlog }) => {
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
-    marginBottom: 5
+    marginBottom: 5,
   }
 
   const showDetails = { display: viewAll ? '' : 'none' }
 
-  let buttonText = viewAll ? 'hide': 'view'
+  let buttonText = viewAll ? 'hide' : 'view'
 
   const changeView = () => {
     setViewAll(!viewAll)
   }
 
   const update = async () => {
-      await updateBlog(blog.id, {
-        user: blog.user.id,
-        likes: blog.likes + 1,
-        author: blog.author,
-        title: blog.title,
-        url: blog.url
-      })
+    await updateBlog(blog.id, {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    })
   }
 
   const remove = async () => {
@@ -36,14 +36,26 @@ const Blog = ({ blog, user, removeBlog, updateBlog }) => {
 
   return (
     <div className="blog" style={blogStyle}>
-      <span id="title">{blog.title}</span> <span id="author">{blog.author}</span> <button onClick={changeView}>{buttonText}</button> <br/>
+      <span id="title">{blog.title}</span>{' '}
+      <span id="author">{blog.author}</span>{' '}
+      <button onClick={changeView}>{buttonText}</button> <br />
       <div style={showDetails}>
-        <span id="url">{blog.url}</span><br/>
-        <span id="likes">likes {blog.likes}</span><button id="like-button" onClick={update}>like</button><br/>
+        <span id="url">{blog.url}</span>
+        <br />
+        <span id="likes">likes {blog.likes}</span>
+        <button id="like-button" onClick={update}>
+          like
+        </button>
+        <br />
         <span id="name">{blog.user.name}</span>
-        {blog.user.username === user.username && <button id="remove-button" onClick={() => remove()}>remove</button>}
+        {blog.user.username === user.username && (
+          <button id="remove-button" onClick={() => remove()}>
+            remove
+          </button>
+        )}
       </div>
-    </div>  
-)}
+    </div>
+  )
+}
 
 export default Blog
