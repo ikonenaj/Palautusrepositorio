@@ -8,31 +8,28 @@ import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  //const [user, setUser] = useState(null)
 
   const queryClient = useQueryClient()
   const newBlogMutation = useMutation(createBlog)
   const updateBlogMutation = useMutation(likeBlog)
   const removeBlogMutation = useMutation(deleteBlog)
 
-  const user = useUser()
-
   const dispatchNotification = useNotificationDispatch()
   const dispatchUser = useUserDispatch()
+
+  const user = useUser()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      //setUser(user)
-      dispatchUser({ type: 'SET', payload: user })
-      setToken(user.token)
+      const loggedInUser = JSON.parse(loggedUserJSON)
+      dispatchUser({ type: 'SET', payload: loggedInUser })
+      setToken(loggedInUser.token)
     }
   }, [dispatchUser])
 
@@ -59,15 +56,15 @@ const App = () => {
     event.preventDefault()
 
     try {
-      const user = await loginService.login({
+      const loggedInUser = await loginService.login({
         username,
         password,
       })
+      dispatchUser({ type: 'SET', payload: loggedInUser })
+      console.log(loggedInUser);
 
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      //setUser(user)
-      dispatchUser({ type: 'SET', payload: user })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedInUser))
+      setToken(loggedInUser.token)
       setUsername('')
       setPassword('')
     } catch (error) {
@@ -78,7 +75,6 @@ const App = () => {
   const handleLogout = async () => {
     try {
       window.localStorage.removeItem('loggedBlogappUser')
-      //setUser(null)
       dispatchUser({ type: 'SET', payload: null })
     } catch (error) {
       showErrorMessage(error)
@@ -94,6 +90,7 @@ const App = () => {
   }
 
   const addBlog = async (blogObject) => {
+    console.log(user);
     newBlogMutation.mutate(blogObject, {
       onSuccess: () => {
         queryClient.invalidateQueries('blogs')

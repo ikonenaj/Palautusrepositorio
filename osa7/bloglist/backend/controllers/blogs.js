@@ -9,6 +9,7 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
   const user = request.user
+  console.log(user);
 
   const newBlog = new Blog({
     title: body.title,

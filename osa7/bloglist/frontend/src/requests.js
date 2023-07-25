@@ -14,6 +14,7 @@ export const getBlogs = async () => {
 }
 
 export const createBlog = async (newBlog) => {
+  console.log(token);
     const config = {
         headers: { Authorization: token },
     }
