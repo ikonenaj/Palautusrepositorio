@@ -61,7 +61,6 @@ const App = () => {
         password,
       })
       dispatchUser({ type: 'SET', payload: loggedInUser })
-      console.log(loggedInUser);
 
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedInUser))
       setToken(loggedInUser.token)

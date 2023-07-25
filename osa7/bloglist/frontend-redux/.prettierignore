@@ -1,0 +1,5 @@
+node_modules
+build
+.prettierrc.json
+.eslintrc.json
+.eslintignore
