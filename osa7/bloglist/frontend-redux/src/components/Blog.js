@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
-const Blog = ({ blog, user, removeBlog, updateBlog }) => {
+const Blog = ({ blog, removeBlog, updateBlog }) => {
   const [viewAll, setViewAll] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -9,6 +11,14 @@ const Blog = ({ blog, user, removeBlog, updateBlog }) => {
     borderWidth: 1,
     marginBottom: 5,
   }
+
+  const id = useParams().id
+
+  //change to blog
+  const blogg = useSelector(state => state.blogs.find(b => b.id === id))
+
+  //change to user
+  const user = useSelector(state => state.user)
 
   const showDetails = { display: viewAll ? '' : 'none' }
 
