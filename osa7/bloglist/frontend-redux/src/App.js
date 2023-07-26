@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -11,9 +13,9 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [action, setAction] = useState('')
   const [user, setUser] = useState(null)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     async function getAll() {
@@ -34,13 +36,7 @@ const App = () => {
 
   const showErrorMessage = (error) => {
     console.log(error)
-    setMessage(error.response.data.error)
-    setAction('error')
-
-    setTimeout(() => {
-      setMessage('')
-      setAction('')
-    }, 5000)
+    dispatch(setNotification(error.response.data.error, 'error', 5))
   }
 
   const handleLogin = async (event) => {
@@ -84,12 +80,7 @@ const App = () => {
     const blog = await blogService.create(blogObject)
     blog.user = user
     setBlogs(blogs.concat(blog))
-    setMessage(`a new blog ${blog.title} by ${blog.author} added`)
-    setAction('add')
-    setTimeout(() => {
-      setMessage('')
-      setAction('')
-    }, 5000)
+    dispatch(setNotification(`a new blog ${blog.title} by ${blog.author} added`, 'add', 5))
   }
 
   const updateBlog = async (id, newObj) => {
@@ -112,12 +103,7 @@ const App = () => {
       await blogService.remove(id)
       const updatedBlogs = blogs.filter((blog) => blog.id !== id)
       setBlogs(updatedBlogs)
-      setMessage('Blog removed successfully')
-      setAction('edit')
-      setTimeout(() => {
-        setMessage('')
-        setAction('')
-      }, 5000)
+      dispatch(setNotification('Blog removed successfully', 'edit', 5))
     } catch (error) {
       showErrorMessage(error)
     }
@@ -132,11 +118,7 @@ const App = () => {
       <button onClick={handleLogout}>logout</button>
       <br />
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm
-          createBlog={addBlog}
-          setAction={setAction}
-          setMessage={setMessage}
-        />
+        <BlogForm createBlog={addBlog} />
       </Togglable>
       <br />
       {blogs
@@ -155,7 +137,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={message} action={action} />
+      <Notification />
       {!user && (
         <LoginForm
           username={username}
