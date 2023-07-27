@@ -7,7 +7,7 @@ import { login, logout, setUser } from './reducers/userReducer'
 import blogService from './services/blogs'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route
 } from 'react-router-dom'
 
 import Blog from './components/Blog'
@@ -15,6 +15,7 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Users from './components/Users'
+import User from './components/User'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -99,6 +100,7 @@ const App = () => {
           <Route path='/' element={<BlogList showErrorMessage={showErrorMessage} />} />
           <Route path='/blogs/:id' element={<Blog />} />
           <Route path='/users' element={<Users />} />
+          <Route path='/users/:id' element={<User />} />
         </Routes>
       </div>
     </Router>
