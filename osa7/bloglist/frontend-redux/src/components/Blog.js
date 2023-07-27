@@ -12,12 +12,6 @@ const Blog = ({ blog, removeBlog, updateBlog }) => {
     marginBottom: 5,
   }
 
-  const id = useParams().id
-
-  //change to blog
-  const blogg = useSelector(state => state.blogs.find(b => b.id === id))
-
-  //change to user
   const user = useSelector(state => state.user)
 
   const showDetails = { display: viewAll ? '' : 'none' }
