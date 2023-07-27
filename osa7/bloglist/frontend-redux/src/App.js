@@ -97,7 +97,7 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
         <br />
         <Routes>
-          <Route path='/' element={<BlogList showErrorMessage={showErrorMessage} />} />
+          <Route path='/' element={<BlogList />} />
           <Route path='/blogs/:id' element={<Blog />} />
           <Route path='/users' element={<Users />} />
           <Route path='/users/:id' element={<User />} />

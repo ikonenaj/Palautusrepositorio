@@ -1,12 +1,12 @@
 import { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { createBlog, deleteBlog, likeBlog } from "../reducers/blogReducer"
+import { createBlog } from "../reducers/blogReducer"
 import { setNotification } from "../reducers/notificationReducer"
-import Blog from "./Blog"
+import { Link } from "react-router-dom"
 import BlogForm from "./BlogForm"
 import Togglable from "./Togglable"
 
-const BlogList = ({ showErrorMessage }) => {
+const BlogList = () => {
     const dispatch = useDispatch()
 
     const blogs = useSelector(state => state.blogs)
@@ -21,27 +21,17 @@ const BlogList = ({ showErrorMessage }) => {
         dispatch(createBlog(blogObject))
         dispatch(setNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`, 'add', 5))
       }
-    
-      const updateBlog = async (id, newObj) => {
-        try {
-          dispatch(likeBlog(id, newObj))
-        } catch (error) {
-          showErrorMessage(error)
-        }
-      }
-    
-      const removeBlog = (id) => {
-        try {
-          dispatch(deleteBlog(id))
-          dispatch(setNotification('Blog removed successfully', 'edit', 5))
-        } catch (error) {
-          showErrorMessage(error)
-        }
-      }
 
     const blogFormRef = useRef()
-    
 
+    const blogStyle = {
+        paddingTop: 10,
+        paddingLeft: 2,
+        border: 'solid',
+        borderWidth: 1,
+        marginBottom: 5,
+      }
+    
     return (
         <div>
             <Togglable buttonLabel="new blog" ref={blogFormRef}>
@@ -49,7 +39,9 @@ const BlogList = ({ showErrorMessage }) => {
             </Togglable>
             <br />
             {blogsSorted.map(blog => (
-                <Blog key={blog.id} blog={blog} removeBlog={removeBlog} updateBlog={updateBlog} />
+                <div key={blog.id} style={blogStyle}>
+                    <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+                </div>
             ))}
         </div>
     )
