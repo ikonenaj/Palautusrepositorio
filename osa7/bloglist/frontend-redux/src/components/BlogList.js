@@ -10,6 +10,7 @@ const BlogList = () => {
     const dispatch = useDispatch()
 
     const blogs = useSelector(state => state.blogs)
+    console.log(blogs);
     const blogsCopy = [...blogs]
     const blogsSorted = blogsCopy.sort((a,b) => b.likes - a.likes)
 
@@ -34,6 +35,7 @@ const BlogList = () => {
     
     return (
         <div>
+            <h2>Blogs</h2>
             <Togglable buttonLabel="new blog" ref={blogFormRef}>
                 <BlogForm createBlog={addBlog} />
             </Togglable>

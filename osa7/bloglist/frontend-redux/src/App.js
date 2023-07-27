@@ -51,8 +51,6 @@ const App = () => {
       <div>
         <NavBar />
         <Notification />
-        <h2>blogs</h2>
-        <br />
         <Routes>
           <Route path='/' element={<BlogList />} />
           <Route path='/blogs/:id' element={<Blog />} />
