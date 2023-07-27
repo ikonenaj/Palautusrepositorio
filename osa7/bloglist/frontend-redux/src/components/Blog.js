@@ -16,37 +16,25 @@ const Blog = () => {
     dispatch(setNotification(error.response.data.error, 'error', 5))
   }
 
-  const update = async () => {
-    await updateBlog(blog.id, {
-      user: blog.user.id,
-      likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-    })
-  }
-
-  const updateBlog = async (id, newObj) => {
+  const updateBlog = () => {
     try {
-      dispatch(likeBlog(id, newObj))
+      const newObj = {...blog, likes: blog.likes + 1}
+      dispatch(likeBlog(blog.id, newObj))
     } catch (error) {
       showErrorMessage(error)
     }
   }
 
-  const removeBlog = (id) => {
+  const removeBlog = () => {
     try {
-      dispatch(deleteBlog(id))
-      dispatch(setNotification('Blog removed successfully', 'edit', 5))
-      navigate('/')
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+        dispatch(deleteBlog(blog.id))
+        dispatch(setNotification('Blog removed successfully', 'edit', 5))
+        navigate('/')
+      }
+
     } catch (error) {
       showErrorMessage(error)
-    }
-  }
-
-  const remove = async () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      removeBlog(blog.id)
     }
   }
 
@@ -61,12 +49,12 @@ const Blog = () => {
       </h1>
       <a href={`//${blog.url}`} target='_blank' rel='noopener noreferrer'>{blog.url}</a><br />
       {blog.likes} likes{' '}
-      <button onClick={update}>
+      <button onClick={updateBlog}>
         like
       </button><br />
       added by {blog.user.name}{' '}
       {blog.user.username === user.username && (
-        <button onClick={() => remove()}>
+        <button onClick={removeBlog}>
           remove
         </button>
       )}
