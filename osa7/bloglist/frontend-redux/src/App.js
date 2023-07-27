@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/usersReducer'
-import { login, logout, setUser } from './reducers/userReducer'
+import { setUser } from './reducers/userReducer'
 import blogService from './services/blogs'
 import {
   BrowserRouter as Router,
@@ -13,14 +12,12 @@ import {
 import Blog from './components/Blog'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
+import NavBar from './components/NavBar'
 import Notification from './components/Notification'
 import Users from './components/Users'
 import User from './components/User'
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
   const dispatch = useDispatch()
 
   const user = useSelector(state => state.user)
@@ -40,50 +37,11 @@ const App = () => {
     }
   }, [dispatch])
 
-  const showErrorMessage = (error) => {
-    console.log(error)
-    dispatch(setNotification(error.response.data.error, 'error', 5))
-  }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      dispatch(login(username, password))
-      setUsername('')
-      setPassword('')
-    } catch (error) {
-      showErrorMessage(error)
-    }
-  }
-
-  const handleLogout = async () => {
-    try {
-      dispatch(logout())
-    } catch (error) {
-      showErrorMessage(error)
-    }
-  }
-
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value)
-  }
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value)
-  }
-
-
-  if (user === null) {
+  if (!user) {
     return (
       <div>
-        <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={handleUsernameChange}
-          handlePasswordChange={handlePasswordChange}
-          handleLogin={handleLogin}
-        />
+        <LoginForm />
       </div>
     )
   }
@@ -91,10 +49,9 @@ const App = () => {
   return (
     <Router>
       <div>
+        <NavBar />
         <Notification />
         <h2>blogs</h2>
-        {user.name} logged in
-        <button onClick={handleLogout}>logout</button>
         <br />
         <Routes>
           <Route path='/' element={<BlogList />} />
