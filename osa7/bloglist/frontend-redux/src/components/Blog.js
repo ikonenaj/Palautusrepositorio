@@ -1,7 +1,10 @@
+import { useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteBlog, likeBlog } from '../reducers/blogReducer'
+import { addComment, deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import CommentForm from './CommentForm'
+import Togglable from './Togglable'
 
 const Blog = () => {
   const dispatch = useDispatch()
@@ -10,6 +13,8 @@ const Blog = () => {
   const id = useParams().id
   const blog = useSelector(state => state.blogs).find(blog => blog.id === id)
   const user = useSelector(state => state.user)
+
+  const commentFormRef = useRef()
 
   const showErrorMessage = (error) => {
     console.log(error)
@@ -38,6 +43,13 @@ const Blog = () => {
     }
   }
 
+  const commentBlog = (comment) => {
+    commentFormRef.current.toggleVisibility()
+    const commentObject = { comment }
+    dispatch(addComment(blog.id, commentObject))
+    dispatch(setNotification('new comment added', 'add', 5))
+  }
+
   if (!blog) {
     return null
   }
@@ -59,8 +71,11 @@ const Blog = () => {
         </button>
       )}
       <h3>comments</h3>
+      <Togglable buttonLabel="add comment" ref={commentFormRef}>
+        <CommentForm commentBlog={commentBlog} />
+      </Togglable>
       <ul>
-        { blog.comments.map((comment, index) => (
+        {blog.comments.map((comment, index) => (
             <li key={index} >{comment}</li>
         ))}
        </ul>

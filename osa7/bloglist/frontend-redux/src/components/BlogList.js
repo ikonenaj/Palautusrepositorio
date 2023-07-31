@@ -10,7 +10,6 @@ const BlogList = () => {
     const dispatch = useDispatch()
 
     const blogs = useSelector(state => state.blogs)
-    console.log(blogs);
     const blogsCopy = [...blogs]
     const blogsSorted = blogsCopy.sort((a,b) => b.likes - a.likes)
 

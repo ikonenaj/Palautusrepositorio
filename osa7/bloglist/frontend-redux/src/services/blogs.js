@@ -34,5 +34,10 @@ const remove = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, config)
 }
 
+const comment = async (id, commentObject) => {
+  const response = await axios.post(`${baseUrl}/${id}/comments`, commentObject)
+  return response.data
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { create, getAll, remove, setToken, update }
+export default { comment, create, getAll, remove, setToken, update }
