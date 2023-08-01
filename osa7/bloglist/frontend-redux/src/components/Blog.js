@@ -5,6 +5,7 @@ import { addComment, deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import CommentForm from './CommentForm'
 import Togglable from './Togglable'
+import { Button } from 'react-bootstrap'
 
 const Blog = () => {
   const dispatch = useDispatch()
@@ -61,14 +62,14 @@ const Blog = () => {
       </h1>
       <a href={`//${blog.url}`} target='_blank' rel='noopener noreferrer'>{blog.url}</a><br />
       {blog.likes} likes{' '}
-      <button onClick={updateBlog}>
+      <Button onClick={updateBlog} variant='primary'>
         like
-      </button><br />
+      </Button><br />
       added by {blog.user.name}{' '}
       {blog.user.username === user.username && (
-        <button onClick={removeBlog}>
+        <Button onClick={removeBlog} variant='danger'>
           remove
-        </button>
+        </Button>
       )}
       <h3>comments</h3>
       <Togglable buttonLabel="add comment" ref={commentFormRef}>

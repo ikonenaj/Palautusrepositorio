@@ -9,7 +9,7 @@ const Users = () => {
             <table>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>Username</th>
                         <th>Blogs created</th>
                     </tr>
                 </thead>

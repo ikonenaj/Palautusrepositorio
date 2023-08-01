@@ -1,32 +1,23 @@
-import { useState } from "react"
+import { Form, Button } from "react-bootstrap"
 
 const CommentForm = ({ commentBlog }) => {
-    const [comment, setComment] = useState('')
 
     const addComment = async (event) => {
         event.preventDefault()
+        const comment = event.target.comment.value
         commentBlog(comment)
-        setComment('')
     }
 
     return (
-        <div>
-            <form onSubmit={addComment}>
-                <div>
-                    comment:
-                    <input
-                        id="comment"
-                        type="text"
-                        value={comment}
-                        name="comment"
-                        onChange={(event) => setComment(event.target.value)}
-                    />
-                </div>
-                <button id="submit-button" type="submit">
-                    add comment
-                </button>
-            </form>
-        </div>
+        <Form onSubmit={addComment}>
+            <Form.Group className="comment" controlId="formComment">
+                <Form.Label>Comment</Form.Label>
+                <Form.Control type="text" name="comment" />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+                add comment
+            </Button>
+        </Form>
     )
 }
 

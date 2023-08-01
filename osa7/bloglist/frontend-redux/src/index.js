@@ -6,7 +6,10 @@ import App from './App'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <Provider store={store}>
-        <App />
-    </Provider>
+    <div className='container'>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </div>
+
 )

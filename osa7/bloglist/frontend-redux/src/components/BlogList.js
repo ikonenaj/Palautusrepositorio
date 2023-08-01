@@ -5,6 +5,7 @@ import { setNotification } from "../reducers/notificationReducer"
 import { Link } from "react-router-dom"
 import BlogForm from "./BlogForm"
 import Togglable from "./Togglable"
+import { Table } from 'react-bootstrap'
 
 const BlogList = () => {
     const dispatch = useDispatch()
@@ -24,27 +25,30 @@ const BlogList = () => {
 
     const blogFormRef = useRef()
 
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        marginBottom: 5,
-      }
-    
     return (
         <div>
-            <h2>Blogs</h2>
-            <Togglable buttonLabel="new blog" ref={blogFormRef}>
-                <BlogForm createBlog={addBlog} />
-            </Togglable>
-            <br />
-            {blogsSorted.map(blog => (
-                <div key={blog.id} style={blogStyle}>
-                    <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-                </div>
-            ))}
-        </div>
+        <h2>Blogs</h2>
+        <Togglable buttonLabel="new blog" ref={blogFormRef}>
+            <BlogForm createBlog={addBlog} />
+        </Togglable>
+        <br />
+        <Table striped>
+            <tbody>
+                {blogsSorted.map(blog => 
+                    <tr key={blog.id}>
+                        <td>
+                            <Link to={`/blogs/${blog.id}`}>
+                                {blog.title}
+                            </Link>
+                        </td>
+                        <td>
+                            {blog.author}
+                        </td>
+                    </tr>
+                )}
+            </tbody>
+        </Table>
+    </div>
     )
 }
 
