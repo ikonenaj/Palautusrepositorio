@@ -9,9 +9,9 @@ const NewBook = () => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const [ createBook ] = useMutation(ADD_BOOK, {
+  const [ addBook ] = useMutation(ADD_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ],
     onError: (error) => {
       const message = error.graphQLErrors[0].message
@@ -30,7 +30,7 @@ const NewBook = () => {
     event.preventDefault()
 
     console.log('add book...')
-    createBook({ variables: {title, author, published, genres} })
+    addBook({ variables: {title, author, published, genres} })
 
     setTitle('')
     setPublished('')
@@ -49,21 +49,21 @@ const NewBook = () => {
       <Notify errorMessage={errorMessage} />
       <form onSubmit={submit}>
         <div>
-          title
+          Title
           <input
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
-          author
+          Author
           <input
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
-          published
+          Published
           <input
             type="number"
             value={published}
@@ -76,11 +76,11 @@ const NewBook = () => {
             onChange={({ target }) => setGenre(target.value)}
           />
           <button onClick={addGenre} type="button">
-            add genre
+            Add genre
           </button>
         </div>
-        <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <div>Genres: {genres.join(' ')}</div>
+        <button type="submit">Create book</button>
       </form>
     </div>
   )
