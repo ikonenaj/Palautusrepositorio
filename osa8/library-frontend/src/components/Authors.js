@@ -64,11 +64,11 @@ const Authors = () => {
       <h3>Set birthyear</h3>
       <form onSubmit={changeBirthyear}>
         <div>
-          Name{' '}
-          <input
-          value={name}
-          onChange={({ target }) => setName(target.value)}
-          />
+          <select name="authorName" onChange={(event) => setName(event.target.value)}>
+            {result.data.allAuthors.map((a) => (
+              <option value={a.name}>{a.name}</option>
+            ))}
+          </select>
         </div>
         <div>
           Birthyear{' '}
