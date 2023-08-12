@@ -8,6 +8,34 @@ interface Result {
     average: number;
 }
 
+interface Arguments {
+    hours: number[],
+    target: number
+}
+
+const parseExerciseArguments = (args: string[]): Arguments => {
+    if (args.length < 4) throw new Error('Not enough arguments');
+
+    let hours: number[] = [];
+
+    if (isNaN(Number(args[2]))) {
+        throw new Error('Target must be a number')
+    }
+
+    for (let i = 3; i < args.length; i++) {
+        if (isNaN(Number(args[i]))) {
+            throw new Error('Provided values must be numbers');
+        } else {
+            hours.push(Number(args[i]));
+        }
+    }
+
+    return {
+        hours: hours,
+        target: Number(args[2])
+    }
+}
+
 const calculateExercises = (hours: number[], target: number): Result => {
     const periodLength = hours.length;
     const trainingDays = hours.filter(day => day > 0).length;
@@ -41,6 +69,17 @@ const calculateExercises = (hours: number[], target: number): Result => {
         ratingDescription: ratingDescription,
         target: target,
         average: average
+    }
+}
+
+try {
+    const { hours, target } = parseExerciseArguments(process.argv);
+    console.log(hours);
+    console.log(target);
+    console.log(calculateExercises(hours, target));
+} catch (error: unknown) {
+    if (error instanceof Error) {
+        console.log(error.message);
     }
 }
 
