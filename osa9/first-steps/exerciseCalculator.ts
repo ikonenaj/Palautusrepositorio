@@ -74,8 +74,6 @@ const calculateExercises = (hours: number[], target: number): Result => {
 
 try {
     const { hours, target } = parseExerciseArguments(process.argv);
-    console.log(hours);
-    console.log(target);
     console.log(calculateExercises(hours, target));
 } catch (error: unknown) {
     if (error instanceof Error) {
