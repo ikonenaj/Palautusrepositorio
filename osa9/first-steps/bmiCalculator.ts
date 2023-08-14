@@ -11,11 +11,11 @@ const parseArguments = (args: string[]): BmiValues => {
       return {
         height: Number(args[2]),
         weight: Number(args[3])
-      }
+      };
     } else {
       throw new Error('Provided values were not numbers!');
     }
-}
+};
 
 export const calculateBmi = (height: number, weight: number): string => {
     const bmi: number = weight / (height / 100) **2;
@@ -41,7 +41,7 @@ export const calculateBmi = (height: number, weight: number): string => {
         return 'Obese (Class II)';
     }
     return 'Obese (Class III)';
-}
+};
 
 try {
     const { height, weight } = parseArguments(process.argv);

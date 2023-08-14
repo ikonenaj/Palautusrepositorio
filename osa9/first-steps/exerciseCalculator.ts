@@ -16,10 +16,10 @@ interface Arguments {
 const parseExerciseArguments = (args: string[]): Arguments => {
     if (args.length < 4) throw new Error('Not enough arguments');
 
-    let hours: number[] = [];
+    const hours: number[] = [];
 
     if (isNaN(Number(args[2]))) {
-        throw new Error('Target must be a number')
+        throw new Error('Target must be a number');
     }
 
     for (let i = 3; i < args.length; i++) {
@@ -33,8 +33,8 @@ const parseExerciseArguments = (args: string[]): Arguments => {
     return {
         hours: hours,
         target: Number(args[2])
-    }
-}
+    };
+};
 
 const calculateExercises = (hours: number[], target: number): Result => {
     const periodLength = hours.length;
@@ -69,8 +69,8 @@ const calculateExercises = (hours: number[], target: number): Result => {
         ratingDescription: ratingDescription,
         target: target,
         average: average
-    }
-}
+    };
+};
 
 try {
     const { hours, target } = parseExerciseArguments(process.argv);
