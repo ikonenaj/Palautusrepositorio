@@ -25,7 +25,6 @@ app.get('/bmi', (request, response) => {
 app.post('/exercises', (request, response) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { daily_exercises, target } = request.body;
-    console.log(request.body);
     if (!daily_exercises || !target) {
         response.status(400).json({ error: 'parameters missing' });
     }
