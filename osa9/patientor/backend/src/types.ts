@@ -4,7 +4,7 @@ export interface Diagnose {
     latin?: string;
 }
 
-enum Gender {
+export enum Gender {
     Male = "male",
     Female = "female",
     Other = "other"
