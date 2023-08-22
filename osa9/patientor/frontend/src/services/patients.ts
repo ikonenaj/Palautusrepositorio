@@ -17,7 +17,7 @@ const getPatient = async (id: string) => {
   );
 
   return data;
-}
+};
 
 const create = async (object: PatientFormValues) => {
   const { data } = await axios.post<Patient>(
