@@ -1,6 +1,6 @@
 import patientService from '../services/patients';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Diagnosis, Patient } from '../types';
 
 interface Props {
@@ -10,11 +10,14 @@ interface Props {
 const PatientInfo = ({ diagnoses }: Props) => {
     const id = useParams().id;
     const [patient, setPatient] = useState<Patient | null>(null);
-    const getPatient = async () => {
-        const patient = await patientService.getPatient(id as string);
-        setPatient(patient);
-    };
-    getPatient();
+
+    useEffect(() => {
+        const getPatient = async () => {
+            const patient = await patientService.getPatient(id as string);
+            setPatient(patient)
+        };
+        void getPatient();
+    }, []);
     
     if (patient) {
         return (
