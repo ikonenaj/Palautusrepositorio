@@ -5,7 +5,7 @@ import { Button, Divider, Container, Typography } from '@mui/material';
 
 import { apiBaseUrl } from "./constants";
 import { Diagnosis, Patient } from "./types";
-import PatientInfo from "./components/PatientInfo";
+import PatientInfo from "./components/PatientInfo/index";
 
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";

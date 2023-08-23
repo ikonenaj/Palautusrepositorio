@@ -1,7 +1,8 @@
-import patientService from '../services/patients';
+import patientService from '../../services/patients';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Diagnosis, Patient } from '../types';
+import { Diagnosis, Patient } from '../../types';
+import EntryDetails from './EntryDetails';
 
 interface Props {
     diagnoses: Diagnosis[];
@@ -17,7 +18,7 @@ const PatientInfo = ({ diagnoses }: Props) => {
             setPatient(patient)
         };
         void getPatient();
-    }, []);
+    }, [id]);
     
     if (patient) {
         return (
@@ -31,7 +32,7 @@ const PatientInfo = ({ diagnoses }: Props) => {
                 </p>
                 <h3>Entries</h3>
                 {patient.entries.map(entry => 
-                    <div key={entry.id}>
+                    <div key={entry.id} style={{borderStyle: "solid", borderWidth: 2, borderRadius: 10, padding: 10, marginBottom: 10}}>
                         {entry.date} <i>{entry.description}</i>
                         <ul>
                             {entry.diagnosisCodes?.map(code =>
@@ -40,6 +41,10 @@ const PatientInfo = ({ diagnoses }: Props) => {
                                 </li>
                             )}
                         </ul>
+                        <EntryDetails entry={entry} />
+                        <p>
+                            Diagnose by: {entry.specialist}
+                        </p>
                     </div>    
                 )}
             </div>
